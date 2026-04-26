@@ -1,0 +1,233 @@
+/* Vehicles.css - Повна синхронізація зі стилем Employees */
+
+.archive-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+}
+
+.table-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.table-header-actions h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.controls-group {
+    display: flex;
+    gap: 15px;
+}
+
+/* Стиль пошуку (з синхронізованою анімацією) */
+.search-input {
+    padding: 10px 15px;
+    background: #1E2A38;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: white;
+    width: 250px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input:focus {
+    border-color: #00BFA5;
+    background: #16202c;
+    box-shadow: 
+        0 0 0 2px rgba(0, 191, 165, 0.1),
+        0 8px 20px -8px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(0, 191, 165, 0.3);
+    width: 280px;
+}
+
+.search-input::placeholder { color: #64748b; }
+
+.add-btn {
+    background: #00BFA5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.add-btn:hover { background: #009688; }
+
+.archive-card {
+    background-color: #1E2A38;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.archive-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Ефект наведення на рядок */
+.archive-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.archive-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.archive-table th {
+    color: #00BFA5;
+    border-bottom: 1px solid #00BFA5; /* Тонка лінія як у працівників */
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* 1. Гарантуємо однакову висоту для всіх комірок */
+.archive-table td {
+    padding: 0 1rem; /* Прибираємо вертикальні падінги, які можуть різнитися */
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 60px; /* Збільшуємо фіксовану висоту для запасу */
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box; /* Важливо для розрахунку висоти */
+}
+
+/* 2. Налаштовуємо контейнер дій */
+
+.emp-name-bold { font-weight: 700; }
+
+/* Твій унікальний стиль номера (зберігаємо прозорість та світіння) */
+.plate-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background-color: transparent !important;
+    color: #00BFA5 !important;
+    border: 2px solid #00BFA5;
+    border-radius: 6px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 0 5px rgba(0, 191, 165, 0.2);
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.plate-badge:hover {
+    background-color: rgba(0, 191, 165, 0.05) !important;
+    box-shadow: 0 0 15px rgba(0, 191, 165, 0.6) !important;
+    text-shadow: 0 0 8px rgba(0, 191, 165, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Комірка дій - ідеально центрована */
+.actions-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    height: 60px; /* МАЄ суворо збігатися з висотою td */
+    margin: 0;
+    padding: 0px;
+    margin-top: 19px;
+}
+
+
+
+
+/* 3. Переконуємось, що кнопки не мають зайвих відступів */
+.edit-icon, .delete-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px; 
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0; /* Прибирає вплив висоти рядка на іконку */
+}
+
+.edit-icon:hover {
+    background-color: rgba(0, 191, 165, 0.1);
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 8px rgba(0, 191, 165, 0.6));
+}
+
+.delete-icon:hover {
+    background-color: rgba(239, 68, 68, 0.1); 
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+}
+
+.delete-icon:hover svg {
+    stroke: #ef4444; /* Кошик червоніє при наведенні */
+}
+
+/* Стилі для модального вікна додавання авто */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1E2A38;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #00BFA5;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h3 { color: #fff; margin-bottom: 20px; text-align: center; }
+
+.modal-content input, 
+.modal-content select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.save-btn {
+    background: #00BFA5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #334155;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
