@@ -23,7 +23,7 @@ const Vehicles = ({ isAdmin }) => {
 
     const fetchVehicles = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/vehicles/');
+            const res = await axios.get('/api/vehicles/');
             setVehicles(res.data);
         } catch (err) {
             console.error("Помилка завантаження авто:", err);
@@ -32,7 +32,7 @@ const Vehicles = ({ isAdmin }) => {
 
     const fetchEmployees = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/employees/'); // Переконайся, що шлях вірний
+            const res = await axios.get('/api/employees/'); // Переконайся, що шлях вірний
             setEmployees(res.data);
         } catch (err) {
             console.error("Помилка завантаження працівників:", err);
@@ -42,7 +42,7 @@ const Vehicles = ({ isAdmin }) => {
     const handleDelete = async (id) => {
         if (window.confirm("Ви впевнені, що хочете видалити цей автомобіль?")) {
             try {
-                await axios.delete(`http://127.0.0.1:8000/api/vehicles/${id}/`);
+                await axios.delete(`/api/vehicles/${id}/`);
                 setVehicles(vehicles.filter(v => v.id !== id));
             } catch (err) {
                 console.error("Помилка при видаленні:", err);
@@ -53,7 +53,7 @@ const Vehicles = ({ isAdmin }) => {
     const handleAddVehicle = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/vehicles/', formData);
+            const res = await axios.post('/api/vehicles/', formData);
             setVehicles([...vehicles, res.data]);
             setIsModalOpen(false);
             setFormData({ employee: '', plate_text: '', brand_model: '' });

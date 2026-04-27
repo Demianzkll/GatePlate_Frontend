@@ -4,6 +4,8 @@ import axios from 'axios';
 import './Home.css';
 
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+
 const Home = () => {
 
   const {
@@ -78,7 +80,7 @@ const Home = () => {
 
       try {
 
-        const res = await axios.get(`http://127.0.0.1:8000/api/live-update/?video=${selectedVideo}`);
+        const res = await axios.get(`/api/live-update/?video=${selectedVideo}`);
 
        
 
@@ -126,7 +128,7 @@ const Home = () => {
 
     try {
 
-      await axios.post('http://127.0.0.1:8000/api/confirm-plate/', {
+      await axios.post('/api/confirm-plate/', {
 
         plate: tempPlate,
 
@@ -157,7 +159,7 @@ const Home = () => {
 
     try {
 
-      await axios.post('http://127.0.0.1:8000/api/update-status/', {
+      await axios.post('/api/update-status/', {
 
         plate: tempPlate || livePlate?.plate,
 
@@ -242,13 +244,13 @@ const Home = () => {
 
                   onPlay={() => {
 
-                    axios.get(`http://127.0.0.1:8000/api/start-analysis/?video=${selectedVideo}`);
+                    axios.get(`/api/start-analysis/?video=${selectedVideo}`);
 
                   }}
 
                 >
 
-                  <source src={`http://127.0.0.1:8000/media/${selectedVideo}`} type="video/mp4" />
+                  <source src={`${API_URL}/media/${selectedVideo}`} type="video/mp4" />
 
                 </video>
 
@@ -507,7 +509,7 @@ const Home = () => {
         }}>
           {lastDetection.vehicle.employee?.photo ? (
             <img 
-              src={`http://127.0.0.1:8000${lastDetection.vehicle.employee.photo}`} 
+              src={`${API_URL}${lastDetection.vehicle.employee.photo}`} 
               alt="Owner" 
               style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
             />

@@ -21,12 +21,12 @@ const Employees = () => {
     }, []);
 
     const fetchEmployees = async () => {
-        const res = await axios.get('http://127.0.0.1:8000/api/employees/');
+        const res = await axios.get('/api/employees/');
         setEmployees(res.data);
     };
 
     const fetchDepartments = async () => {
-        const res = await axios.get('http://127.0.0.1:8000/api/departments/');
+        const res = await axios.get('/api/departments/');
         setDepartments(res.data);
     };
 
@@ -35,7 +35,7 @@ const Employees = () => {
     e.stopPropagation(); // Щоб не розгортався рядок
     if (window.confirm("Ви впевнені, що хочете видалити цього працівника?")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/employees/${id}/`);
+            await axios.delete(`/api/employees/${id}/`);
             fetchEmployees(); // Оновлюємо список
         } catch (err) {
             console.error("Помилка видалення:", err);
@@ -93,8 +93,8 @@ const Employees = () => {
 
         try {
             const url = currentEmp 
-                ? `http://127.0.0.1:8000/api/employees/${currentEmp.id}/`
-                : 'http://127.0.0.1:8000/api/employees/';
+                ? `/api/employees/${currentEmp.id}/`
+                : '/api/employees/';
             
             await axios({
                 method: currentEmp ? 'put' : 'post',

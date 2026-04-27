@@ -13,7 +13,7 @@ const Guests = () => {
 
     const fetchGuests = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/guests/');
+            const res = await axios.get('/api/guests/');
             setGuests(res.data);
         } catch (err) {
             console.error("Помилка завантаження гостей:", err);
@@ -23,7 +23,7 @@ const Guests = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Видалити гостьовий пропуск?")) {
             try {
-                await axios.delete(`http://127.0.0.1:8000/api/vehicles/${id}/`);
+                await axios.delete(`/api/vehicles/${id}/`);
                 setGuests(guests.filter(g => g.id !== id));
             } catch (err) {
                 console.error("Помилка при видаленні:", err);

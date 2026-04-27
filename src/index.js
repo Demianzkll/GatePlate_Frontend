@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import axios from 'axios'; 
 
 // 1. Встановлюємо базовий URL для всіх запитів до Django
-axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 // 2. Налаштування інтерцептора для передачі токена
 axios.interceptors.request.use(

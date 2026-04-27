@@ -12,7 +12,7 @@ const Login = ({ onLogin }) => {
         localStorage.clear()
         e.preventDefault();
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/login/', { username, password });
+            const res = await axios.post('/api/login/', { username, password });
             
             // 1. Зберігаємо всі дані, включаючи РОЛЬ
             localStorage.setItem('token', res.data.token);

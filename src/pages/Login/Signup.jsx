@@ -25,7 +25,7 @@ const Signup = () => {
         try {
             // Відправляємо дані на бекенд (без confirmPassword)
             const { confirmPassword, ...dataToSend } = formData;
-            await axios.post('http://127.0.0.1:8000/api/register/', dataToSend);
+            await axios.post('/api/register/', dataToSend);
             
             alert("Реєстрація успішна! Тепер увійдіть у систему.");
             navigate('/login');

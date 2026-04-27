@@ -14,7 +14,7 @@ const GuestRegistration = () => {
         setStatus({ type: '', message: '' });
 
         try {
-            await axios.post('http://127.0.0.1:8000/api/guest/register/', {
+            await axios.post('/api/guest/register/', {
                 plate_text: plate.toUpperCase().replace(/\s/g, ''),
                 brand_model: "Гість (Self-reg)"
             });

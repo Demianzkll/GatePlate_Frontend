@@ -9,7 +9,7 @@ export const DataProvider = ({ children }) => {
 
     const fetchLastDetection = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/detected-plates/');
+            const res = await axios.get('/api/detected-plates/');
             if (res.data.length > 0) {
                 setLastDetection(res.data[0]);
             }

@@ -55,7 +55,7 @@ const PhotoRecognition = () => {
         formData.append('car_image', file);
 
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/recognize-photo/', formData, {
+            const res = await axios.post('/api/recognize-photo/', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -76,7 +76,7 @@ const PhotoRecognition = () => {
         try {
             const token = localStorage.getItem('token');
             const headers = token ? { 'Authorization': `Token ${token}` } : {};
-            const res = await axios.get(`http://127.0.0.1:8000/api/payment/status/?order=${orderRef}`, { headers });
+            const res = await axios.get(`/api/payment/status/?order=${orderRef}`, { headers });
 
             if (res.data.status === 'approved' && res.data.api_key) {
                 setApiKeyResult({
@@ -107,7 +107,7 @@ const PhotoRecognition = () => {
             const headers = token ? { 'Authorization': `Token ${token}` } : {};
 
             // 1. Отримуємо дані для підпису від бекенду
-            const res = await axios.post('http://127.0.0.1:8000/api/payment/create/', { plan: planId }, { headers });
+            const res = await axios.post('/api/payment/create/', { plan: planId }, { headers });
             const paymentData = res.data;
 
             // 2. Ініціалізуємо віджет WayForPay
