@@ -25,15 +25,16 @@ const Home = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [tempPlate, setTempPlate] = useState("");
+  const [parkingInfo, setParkingInfo] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const videoOptions = [
-    { value: '', label: 'Оберіть джерело відео' },
-    { value: 'video1.mp4', label: 'Потік №1' },
-    { value: 'video2.mp4', label: 'Потік №2' },
-    { value: 'video3.mp4', label: 'Потік №3' },
-    { value: 'video4.mp4', label: 'Потік №4' },
+    { value: '', label: 'Оберіть камеру' },
+    { value: 'cam1', label: 'Камера 1 (В\'їзд)' },
+    { value: 'cam2', label: 'Камера 2' },
+    { value: 'cam3', label: 'Камера 3' },
+    { value: 'cam4', label: 'Камера 4' },
   ];
 
   // Close dropdown on outside click
@@ -49,16 +50,27 @@ const Home = () => {
 
 
   // 1. Опитування Бази Даних для історії (раз на 3 сек)
-
   useEffect(() => {
-
     fetchLastDetection();
-
     const timer = setInterval(fetchLastDetection, 3000);
-
     return () => clearInterval(timer);
-
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 1.5 Опитування глобального статусу парковки (раз на 3 сек)
+  useEffect(() => {
+    const fetchParking = async () => {
+      try {
+        const res = await axios.get('/api/parking-status/');
+        setParkingInfo(res.data);
+      } catch (err) {
+        console.error("Помилка отримання статусу парковки:", err);
+      }
+    };
+    
+    fetchParking();
+    const timer = setInterval(fetchParking, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
 
   // 2. Опитування "Живого" потоку AI-аналітики
@@ -85,25 +97,23 @@ const Home = () => {
        
 
         if (res.data) {
-
-          setLivePlate(res.data);
-
-         
-
-          // Якщо AI потребує втручання і ми ще не в режимі редагування
-
-          if (res.data.needs_confirmation && !editMode) {
-
-            setEditMode(true);
-
-            setTempPlate(res.data.plate);
-
+          // Якщо дані парковки прийшли разом з потоком (опціонально)
+          if (res.data.parking) {
+            setParkingInfo(res.data.parking);
           }
-
+          
+          if (res.data.plate) {
+            setLivePlate(res.data);
+            // Якщо AI потребує втручання і ми ще не в режимі редагування
+            if (res.data.needs_confirmation && !editMode) {
+              setEditMode(true);
+              setTempPlate(res.data.plate);
+            }
+          } else if (!editMode) {
+            setLivePlate(null);
+          }
         } else if (!editMode) {
-
           setLivePlate(null);
-
         }
 
       } catch (err) {
@@ -120,6 +130,16 @@ const Home = () => {
     return () => clearInterval(liveTimer);
 
   }, [selectedVideo, editMode, setLivePlate]);
+
+
+  // 3. Запуск AI-аналізу при виборі камери
+  useEffect(() => {
+    if (selectedVideo) {
+      axios.get(`/api/start-analysis/?video=${selectedVideo}`)
+        .catch(err => console.error("Помилка запуску аналізу:", err));
+    }
+  }, [selectedVideo]);
+
 
 
   // ДІЯ: Підтвердження пропуску (для гостей або заблокованих вручну)
@@ -233,27 +253,13 @@ const Home = () => {
           <div className="video-wrapper" style={{ minHeight: '350px', background: '#000', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
 
               {selectedVideo ? (
-
-                <video
-
+                <iframe
                   key={selectedVideo}
-
-                  controls autoPlay muted crossOrigin="anonymous"
-
-                  style={{ width: '100%', display: 'block' }}
-
-                  onPlay={() => {
-
-                    axios.get(`/api/start-analysis/?video=${selectedVideo}`);
-
-                  }}
-
-                >
-
-                  <source src={`${API_URL}/media/${selectedVideo}`} type="video/mp4" />
-
-                </video>
-
+                  src={`${process.env.REACT_APP_MTX_URL || 'http://localhost:8889'}/${selectedVideo}/`}
+                  style={{ width: '100%', height: '350px', border: 'none', display: 'block' }}
+                  title={`Live Stream ${selectedVideo}`}
+                  allow="autoplay; fullscreen"
+                ></iframe>
               ) : (
 
                 <div className="video-placeholder" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '350px', color: '#64748b' }}>
@@ -438,6 +444,8 @@ const Home = () => {
 
           </div>
 
+
+
         </section>
 
 
@@ -575,6 +583,19 @@ const Home = () => {
     </div>
   )}
 </div>
+
+          {/* ВІДЖЕТ ПАРКОВКИ (Відображається завжди) */}
+          {(parkingInfo) && (
+            <div className="card" style={{ marginTop: '20px', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#1E2A38', border: '1px solid rgba(0, 191, 165, 0.2)' }}>
+              <div>
+                <h4 style={{ margin: 0, color: '#f8fafc', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Вільних паркомісць:</h4>
+                <p style={{ margin: '5px 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>Зайнято: {parkingInfo.occupied} з {parkingInfo.total}</p>
+              </div>
+              <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: parkingInfo.available > 0 ? '#00BFA5' : '#ef4444' }}>
+                {parkingInfo.available}
+              </div>
+            </div>
+          )}
 
         </aside>
 
